@@ -4,6 +4,9 @@ const router = express.Router();
 //or i can create an email and seed data with gravatar images.
 const gravatar = require("gravatar");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const config = require("config");
+
 //line below is for validations. peep docs for better understanding.
 const { check, validationResult } = require("express-validator/check");
 
@@ -66,16 +69,31 @@ router.post(
         avatar,
         password
       });
-
+      // Encrypt password
       //creating salt.
       const salt = await bcrypt.genSalt(10);
 
       user.password = await bcrypt.hash(password, salt);
 
       await user.save();
-      // Encrypt password
+
       //Return jsonwebtoken (jwt)
-      res.send("User Registered");
+      const payload = {
+        user: {
+          id: user.id
+        }
+      };
+
+      //what this mean
+      jwt.sign(
+        payload,
+        config.get("jwtSecret"),
+        { expiresIn: 360000 },
+        (err, token) => {
+          if (err) throw err;
+          res.json({ token });
+        }
+      );
     } catch (err) {
       console.error(err.message);
       res.status(500).send("server error");
