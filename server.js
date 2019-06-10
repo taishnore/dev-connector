@@ -14,6 +14,13 @@ const app = express();
 //connect DB
 connectDB();
 
+//Init Middleware -- this allows us to get the data in
+//req.body in the User post("/") request/route
+//req, remember, is coming from the users.
+//res is what the server sends back.
+//I can imagine that there'll be conditionals and shit.
+app.use(express.json({ extended: false }));
+
 //this is how i start the server; the domain for this would be
 //localhost:5000/
 app.get("/", (req, res) => {
