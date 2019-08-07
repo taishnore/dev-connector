@@ -7,6 +7,7 @@ const {check, validationResult} = require("express-validator/check");
 
 const Profile = require("../../models/Profile");
 const User = require("../../models/User");
+const Post = require("../../models/Post");
 
 //@route   GET api/profile/me
 //@desc    obtain current user's profile
@@ -162,7 +163,8 @@ router.get("/user/:user_id", async (req, res) => {
 
 router.delete("/", auth, async (req, res) => {
     try {
-        //Todo – remove user's posts
+        //remove user posts
+        await Post.deleteMany({user: req.user.id});
         //Remove profile
         await Profile.findOneAndRemove({user: req.user.id});
         //This will remove the user
@@ -195,11 +197,9 @@ router.put(
         ]
     ],
     async (req, res) => {
-        console.log("in the put experience")
         const errors = validationResult(req);
 
         if (!errors.isEmpty()) {
-            console.log("seems like there are errors, here are errors.array", errors.array());
             return res.status(400).json({errors: errors.array()});
         }
 
