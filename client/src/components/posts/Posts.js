@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { getPosts } from "../../actions/post";
 import PostItem from "./PostItem";
+import PostForm from "./PostForm";
 
 const MyComponent = ({ getPosts, post: { posts, loading } }) => {
   useEffect(() => {
@@ -17,7 +18,7 @@ const MyComponent = ({ getPosts, post: { posts, loading } }) => {
       <p className="lead">
         <i className="fas fa-user" /> Welcome to the community
       </p>
-      {/*    post form*/}
+      <PostForm />
       <div className="posts">
         {posts.map(post => (
           <PostItem key={post._id} post={post} />
