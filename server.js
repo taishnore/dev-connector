@@ -1,6 +1,6 @@
 //how to bring express in.
 const express = require("express");
-
+const path = require("path");
 //how to connect to DB -- look at the correct file
 //does module.exports export a variable and function?
 //then require either brings in a module or variable?
@@ -23,9 +23,9 @@ app.use(express.json({ extended: false }));
 
 //this is how i start the server; the domain for this would be
 //localhost:5000/
-app.get("/", (req, res) => {
-  res.send("api running");
-});
+// app.get("/", (req, res) => {
+//   res.send("api running");
+// });
 
 //Define Routes -- these are referring to the routes files,
 //which are analogous to controllers, i think. maybe not though.
@@ -33,6 +33,16 @@ app.use("/api/users", require("./routes/api/users"));
 app.use("/api/auth", require("./routes/api/auth"));
 app.use("/api/profile", require("./routes/api/profile"));
 app.use("/api/posts", require("./routes/api/posts"));
+
+// serve static assets in production
+if (process.env.NODE_ENV === "production") {
+  //Set static folder
+  app.use(express.static("client/build"));
+
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+  });
+}
 
 //for the sake of deploying this app.
 const PORT = process.env.PORT || 5000;
