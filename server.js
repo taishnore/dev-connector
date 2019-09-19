@@ -1,6 +1,10 @@
 //how to bring express in.
 const express = require("express");
+
+//todo what does path do?
 const path = require("path");
+
+//todo how does this work?
 //how to connect to DB -- look at the correct file
 //does module.exports export a variable and function?
 //then require either brings in a module or variable?
@@ -14,6 +18,7 @@ const app = express();
 //connect DB
 connectDB();
 
+//todo what does this do? how does it work?
 //Init Middleware -- this allows us to get the data in
 //req.body in the User post("/") request/route
 //req, remember, is coming from the users.
@@ -27,6 +32,8 @@ app.use(express.json({ extended: false }));
 //   res.send("api running");
 // });
 
+//todo where is the port defined? .env?
+//this is how the endpoints are defined
 //Define Routes -- these are referring to the routes files,
 //which are analogous to controllers, i think. maybe not though.
 app.use("/api/users", require("./routes/api/users"));
@@ -35,6 +42,7 @@ app.use("/api/profile", require("./routes/api/profile"));
 app.use("/api/posts", require("./routes/api/posts"));
 
 // serve static assets in production
+//this had to do with deployment
 if (process.env.NODE_ENV === "production") {
   //Set static folder
   app.use(express.static("client/build"));
